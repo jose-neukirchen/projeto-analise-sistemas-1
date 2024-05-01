@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTFilmes</title>
+    <title>Detalhes do Filme</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -21,17 +21,12 @@
     </header>
 
     <div class="container">
-        <div class="catalog">
-            <!-- Itera sobre os filmes e exibe-os -->
-            {% for filme in filmes %}
-            <div class="item">
-                <a href="{{ url_for('filme', id=filme.id) }}"> <!-- Adicione este link -->
-                    <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
-                </a>
-                <h2>{{ filme.titulo }}</h2>
-                <p>{{ filme.descricao }}</p>
-            </div>
-            {% endfor %}
+        <div class="filme-details">
+            <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
+            <h2>{{ filme.titulo }}</h2>
+            <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
+            <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p>
+            <!-- Adicione mais informações conforme necessário -->
         </div>
     </div>
 

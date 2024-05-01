@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UTFilmes</title>
+    <title>Login - UTFilmes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
@@ -20,15 +20,22 @@
         </div>
     </header>
 
-    <div id="cadastro" class="section">
+    <div id="login" class="section">
         <div class="container">
-            <h2 class="section-title">Cadastro de Usuário</h2>
-            <form action="/cadastrar" method="post" id="cadastro-form">
+            <h2 class="section-title">Login</h2>
+            
+            <!-- Exibe a mensagem de erro se houver -->
+            {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+            {% endif %}
+            
+            <!-- Formulário de login -->
+            <form action="#" method="post" id="login-form">
                 <label for="username">Usuário:</label>
                 <input type="text" id="username" name="username" required>
                 <label for="password">Senha:</label>
                 <input type="password" id="password" name="password" required>
-                <button type="submit">Cadastrar</button>
+                <button type="submit">Entrar</button>
             </form>
         </div>
     </div>
