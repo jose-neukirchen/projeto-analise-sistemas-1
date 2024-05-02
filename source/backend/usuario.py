@@ -8,6 +8,9 @@ class Usuario:
         self.watchlist = []
         self.resenhas = {}
 
+    def get_nome(self):
+        return self.nome
+    
     def adicionar_resenha(self, filme, resenha, nota):
         self.resenhas[filme] = resenha
         self.nota[filme] = nota
@@ -78,3 +81,19 @@ class Usuario:
             return True
         else:
             return False
+        
+    @staticmethod
+    def obter_usuario_pelo_nome(nome):
+        conn = sqlite3.connect('usuarios.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM usuarios WHERE nome = ?', (nome,))
+        usuario = cursor.fetchone()
+        conn.close()
+        if usuario:
+            # Se o usuário foi encontrado, retornar um objeto Usuario com os dados recuperados do banco de dados
+            id, nome, senha, watchlist_json, resenhas_json = usuario
+            watchlist = json.loads(watchlist_json)
+            resenhas = json.loads(resenhas_json)
+            return Usuario(nome, senha, watchlist, resenhas)
+        else:
+            return None
