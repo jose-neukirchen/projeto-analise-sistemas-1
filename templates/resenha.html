@@ -15,6 +15,10 @@
             <h1 class="title">UTFilmes</h1>
             <nav>
                 <ul class="nav-links">
+                    {% if 'usuario_id' in session %}
+                        <li>Usuário: {{ session['usuario_id'] }}</li>
+                        <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

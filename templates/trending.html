@@ -15,6 +15,10 @@
             <h1 class="title">UTFilmes</h1>
             <nav>
                 <ul class="nav-links">
+                    {% if 'usuario_id' in session %}
+                        <li>Usuário: {{ session['usuario_id'] }}</li>
+                        <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
@@ -25,7 +29,7 @@
             <!-- Itera sobre os filmes e exibe-os -->
             {% for filme in filmes %}
             <div class="item">
-                <a href="{{ url_for('filme', id=filme.id) }}"> <!-- Adicione este link -->
+                <a href="{{ url_for('filme', id=filme.id) }}">
                     <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
                 </a>
                 <h2>{{ filme.titulo }}</h2>

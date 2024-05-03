@@ -56,6 +56,10 @@
             <h1 class="title">UTFilmes</h1>
             <nav>
                 <ul class="nav-links">
+                    {% if 'usuario_id' in session %}
+                        <li>Usuário: {{ session['usuario_id'] }}</li>
+                        <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>
@@ -67,10 +71,10 @@
             <h2>{{ filme.titulo }}</h2>
             <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
             <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p>
-            {% if usuario_logado %}
+            {% if resenha %}
                 <p><strong>Sua Resenha:</strong></p>
-                <p><strong>Nota:</strong> {{ usuario_resenha.nota }}</p>
-                <p><strong>Resenha:</strong> {{ usuario_resenha.texto }}</p>
+                <p><strong>Nota:</strong> {{ nota }}</p>
+                <p><strong>Resenha:</strong> {{ resenha }}</p>
             {% endif %}
             <!-- Botão de Review -->
             <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Review</a>

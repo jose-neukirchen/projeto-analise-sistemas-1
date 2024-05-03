@@ -2,18 +2,20 @@ import sqlite3
 import json
 
 class Usuario:
-    def __init__(self, nome, senha):
+    def __init__(self, nome, senha, watchlist=None, resenhas=None):
         self.nome = nome
         self.senha = senha
-        self.watchlist = []
-        self.resenhas = {}
+        self.watchlist = watchlist
+        self.resenhas = resenhas
 
     def get_nome(self):
         return self.nome
     
-    def adicionar_resenha(self, filme, resenha, nota):
-        self.resenhas[filme] = resenha
-        self.nota[filme] = nota
+    def adicionar_resenha(self, movie_id, resenha, nota):
+        movie_id = str(movie_id)
+        if movie_id not in self.resenhas:
+            self.resenhas[movie_id] = []
+        self.resenhas[movie_id] = [resenha, nota]  
         self._atualizar_resenhas_no_banco_de_dados()
 
     def adicionar_filme_watchlist(self, filme):
@@ -97,3 +99,15 @@ class Usuario:
             return Usuario(nome, senha, watchlist, resenhas)
         else:
             return None
+        
+
+    # Método para obter a resenha e a nota do usuário para um filme específico
+    def obter_resenha_e_nota(self, movie_id):
+        movie_id = str(movie_id)
+        if self.resenhas and movie_id in self.resenhas:
+            print("ok")
+            resenha, nota = self.resenhas[movie_id]
+            print(resenha, nota)
+            return resenha, nota
+        else:
+            return None, None
