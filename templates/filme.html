@@ -1,44 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Filme</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <header>
-        <div class="container">
-            <div class="logo">
-                <img src="logo.jpg" alt="Logo UTFilmes">
-            </div>
-            <h1 class="title">UTFilmes</h1>
-            <nav>
-                <ul class="nav-links">
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <div class="container">
-        <div class="filme-details">
-            <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
-            <h2>{{ filme.titulo }}</h2>
-            <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
-            <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p> -->
-            <!-- Botão de Review -->
-            <!-- <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Review</a>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Catálogo de Filmes e Séries. Todos os direitos reservados.</p>
-        </div>
-    </footer>
-</body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -78,6 +37,11 @@
             {% endif %}
             <!-- Botão de Review -->
             <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Review</a>
+            <!-- Botão de Watchlist -->
+            <form action="{{ url_for('adicionar_watchlist') }}" method="POST">
+                <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                <button type="submit">Adicionar à Watchlist</button>
+            </form>
         </div>
     </div>
 

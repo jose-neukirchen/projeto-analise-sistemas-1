@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for, session
 from source.backend.api_tmdb import API_TMDb
 from source.backend.usuario import Usuario
-from source.backend.resenha import Resenha
+from source.backend.filme import Filme
 from os import environ
 
 tmdb_token = environ["TMDB_TOKEN"]
@@ -24,6 +24,16 @@ def catalogo():
         return render_template('trending.html', filmes=filmes)
     else:
         return "Erro ao obter filmes do TMDB"
+    
+@app.route('/search')
+def busca():
+    movie_title = request.args.get('filme')  # Obtém o valor do argumento 'filme' da URL
+    if movie_title:
+        tmdb_api = API_TMDb(api_key=tmdb_token)
+        filmes = tmdb_api.buscar_filme(movie_title)
+        if filmes:
+            return render_template('search.html', filmes=filmes)
+    return "Erro ao obter filmes do TMDB"
     
     
 @app.route('/filme/<int:id>', methods=['GET'])  # Define a rota para o filme com base no ID
@@ -94,8 +104,6 @@ def resenha():
         else:
             return "Filme não encontrado"
 
-
-#ERRO AQUI
 @app.route('/salvar_resenha', methods=['POST'])
 def salvar_resenha():
     if request.method == 'POST':
@@ -109,6 +117,32 @@ def salvar_resenha():
             return redirect(url_for('filme', id=movie_id))
         else:
             return "Erro ao salvar a resenha"
+
+@app.route('/watchlist', methods=['GET'])
+def watchlist():
+    if request.method == 'GET':
+        print("retornou")
+        usuario_atual = Usuario.obter_usuario_pelo_nome(session.get('usuario_id'))
+        filmes_ids = usuario_atual.get_watchlist()
+        print(filmes_ids)
+        tmdb_api = API_TMDb(api_key=tmdb_token)
+        filmes_obj = []
+        for filme_id in filmes_ids:
+            filme = tmdb_api.buscar_filme_por_id(filme_id)
+            filmes_obj.append(filme)
+        return render_template('watchlist.html', filmes=filmes_obj)
+    
+@app.route('/adicionar_watchlist', methods=['POST'])
+def adicionar_watchlist():
+    if request.method == 'POST':
+        movie_id = request.form['movie_id']
+        usuario_atual = Usuario.obter_usuario_pelo_nome(session.get('usuario_id'))
+        if usuario_atual:
+            usuario_atual.adicionar_filme_watchlist(movie_id)
+            # Redirecionar para a página de watchlist
+            return redirect(url_for('watchlist'))
+        else:
+            return "Erro ao adicionar à watchlist"
 
 if __name__ == '__main__':
     app.run(debug=True)

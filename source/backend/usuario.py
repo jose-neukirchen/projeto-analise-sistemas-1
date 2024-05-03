@@ -11,6 +11,9 @@ class Usuario:
     def get_nome(self):
         return self.nome
     
+    def get_watchlist(self):
+        return self.watchlist
+    
     def adicionar_resenha(self, movie_id, resenha, nota):
         movie_id = str(movie_id)
         if movie_id not in self.resenhas:
@@ -18,9 +21,13 @@ class Usuario:
         self.resenhas[movie_id] = [resenha, nota]  
         self._atualizar_resenhas_no_banco_de_dados()
 
-    def adicionar_filme_watchlist(self, filme):
-        self.watchlist.append(filme)
-        self._atualizar_watchlist_no_banco_de_dados()
+    def adicionar_filme_watchlist(self, filme_id):
+        filme_id = str(filme_id)
+        if filme_id in self.watchlist:
+            return
+        else:
+            self.watchlist.append(filme_id)
+            self._atualizar_watchlist_no_banco_de_dados()
 
     def _atualizar_resenhas_no_banco_de_dados(self):
         conn = sqlite3.connect('usuarios.db')
@@ -40,6 +47,8 @@ class Usuario:
         conn.commit()
         conn.close()
 
+
+    # Transferir para classe database
     @staticmethod
     def criar_banco_dados():
         conn = sqlite3.connect('usuarios.db')

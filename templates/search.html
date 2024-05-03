@@ -18,21 +18,11 @@
                     {% if 'usuario_id' in session %}
                         <li>Usuário: {{ session['usuario_id'] }}</li>
                         <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
-                        <!-- Adicionando o link para a watchlist -->
-                        <li><a href="{{ url_for('watchlist') }}">Watchlist</a></li>
                     {% endif %}
                 </ul>
             </nav>
         </div>
     </header>
-
-    <!-- Barra de pesquisa -->
-    <div class="search-bar">
-        <form action="{{ url_for('busca') }}" method="GET">
-            <input type="text" name="filme" placeholder="Digite o nome do filme">
-            <button type="submit">Pesquisar</button>
-        </form>
-    </div>
 
     <div class="container">
         <div class="catalog">
