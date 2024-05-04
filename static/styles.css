@@ -1,0 +1,136 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
+
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    width: 100%;
+}
+
+.nav-links {
+    display: flex;
+    justify-content: center;
+}
+
+.nav-links li {
+    margin: 0 20px;
+}
+
+.nav-links li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.section {
+    padding: 50px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    max-width: 400px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    border-radius: 10px;
+}
+
+.logo {
+    margin-right: 20px; /* Adiciona um espaço entre o logo e o título */
+}
+
+.logo img {
+    width: 50px; /* Diminui o tamanho do logo */
+}
+
+.container {
+    display: flex;
+    align-items: center; /* Centraliza verticalmente os itens dentro do header */
+}
+
+.title {
+    flex-grow: 1; /* Faz o título ocupar todo o espaço disponível */
+}
+
+.catalog {
+    display: flex;
+    flex-wrap: wrap; /* Para que os itens quebrem para a próxima linha se não couberem na largura da tela */
+    justify-content: space-between; /* Para espaçar os itens igualmente na linha */
+    margin-top: 20px;
+}
+
+.item {
+    width: calc(33.33% - 10px); /* Define a largura dos itens para ocupar cerca de um terço da largura do contêiner */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-bottom: 20px; /* Adiciona um espaço entre os itens */
+}
+
+.item img {
+    max-width: 100%;
+    height: 200px; /* Altura fixa para as imagens */
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    margin-bottom: 20px; /* Adiciona espaço abaixo do título */
+}
+
