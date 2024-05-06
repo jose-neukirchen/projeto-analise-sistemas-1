@@ -30,6 +30,11 @@
             <h2>{{ filme.titulo }}</h2>
             <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
             <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p>
+            <p><strong>Duração:</strong> {{ filme.duracao }} minutos</p>
+            <p><strong>Gênero:</strong> {{ filme.generos | join(', ') }}</p>
+            <p><strong>Lançamento:</strong> {{ filme.data_lancamento }}</p>
+            <p><strong>Língua Original:</strong> {{ filme.lingua }}</p>
+            <p><strong>País de Origem:</strong> {{ filme.pais | join(', ') }}</p>
             {% if resenha %}
                 <p><strong>Sua Resenha:</strong></p>
                 <p><strong>Nota:</strong> {{ nota }}</p>

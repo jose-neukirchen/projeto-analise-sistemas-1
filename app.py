@@ -2,12 +2,18 @@ from flask import Flask, jsonify, render_template, request, redirect, url_for, s
 from source.backend.api_tmdb import API_TMDb
 from source.backend.usuario import Usuario
 from source.backend.filme import Filme
+from source.backend.resenha import Resenha
+from source.backend.database import Database
 from os import environ
 
 tmdb_token = environ["TMDB_TOKEN"]
 
 
-Usuario.criar_banco_dados()
+# Criar uma instância da classe Database
+db = Database()
+
+# Chama o método para criar o banco de dados e as tabelas
+db.criar_banco_dados()
 
 app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = 'teste123'
@@ -45,7 +51,7 @@ def filme(id):
         resenha = None
         if 'usuario_id' in session:
             # Obtém o usuário da sessão
-            usuario = Usuario.obter_usuario_pelo_nome(session['usuario_id'])
+            usuario = db.obter_usuario_pelo_nome(nome=session['usuario_id'])
             if usuario:
                 # Obtém a resenha e a nota do usuário para o filme atual
                 resenha, nota = usuario.obter_resenha_e_nota(id)
@@ -60,7 +66,7 @@ def cadastrar():
         senha = request.form['password']
         # Adiciona o usuário ao banco de dados
         print("Ok")
-        Usuario.adicionar_usuario(nome, senha)
+        db.adicionar_usuario(nome, senha)
         # Redireciona para a página de login
         return redirect(url_for('login'))
 
@@ -72,9 +78,9 @@ def login():
         password = request.form['password']
         
         # Verifica se o usuário está no banco de dados e a senha está correta
-        if Usuario.validar_login(username, password):
+        if db.validar_login(username, password):
             # Armazenar o ID do usuário na sessão
-            usuario = Usuario.obter_usuario_pelo_nome(username)
+            usuario = db.obter_usuario_pelo_nome(nome=username)
             session['usuario_id'] = usuario.get_nome()
             # Redireciona para a página de catálogo se o login for bem-sucedido
             return redirect(url_for('catalogo'))
@@ -110,9 +116,13 @@ def salvar_resenha():
         nota = request.form['nota']
         texto = request.form['texto']
         movie_id = request.form['movie_id']
-        usuario_atual = Usuario.obter_usuario_pelo_nome(session.get('usuario_id'))
+        
+        # Criar um objeto Resenha com os dados do formulário
+        resenha = Resenha(movie_id=movie_id, nota=nota, texto=texto)
+        
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
         if usuario_atual:
-            usuario_atual.adicionar_resenha(movie_id, texto, nota)
+            usuario_atual.adicionar_resenha(db, resenha)
             # Redirecionar para a página do filme após salvar a resenha
             return redirect(url_for('filme', id=movie_id))
         else:
@@ -122,7 +132,7 @@ def salvar_resenha():
 def watchlist():
     if request.method == 'GET':
         print("retornou")
-        usuario_atual = Usuario.obter_usuario_pelo_nome(session.get('usuario_id'))
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
         filmes_ids = usuario_atual.get_watchlist()
         print(filmes_ids)
         tmdb_api = API_TMDb(api_key=tmdb_token)
@@ -136,9 +146,9 @@ def watchlist():
 def adicionar_watchlist():
     if request.method == 'POST':
         movie_id = request.form['movie_id']
-        usuario_atual = Usuario.obter_usuario_pelo_nome(session.get('usuario_id'))
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
         if usuario_atual:
-            usuario_atual.adicionar_filme_watchlist(movie_id)
+            usuario_atual.adicionar_filme_watchlist(db, movie_id)
             # Redirecionar para a página de watchlist
             return redirect(url_for('watchlist'))
         else:

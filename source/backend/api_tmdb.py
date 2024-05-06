@@ -16,12 +16,19 @@ class API_TMDb:
             filmes_trending = response.json().get('results', [])
             filmes = []
             for filme_info in filmes_trending:
+                # Extrai apenas os nomes dos gêneros
+                generos_filme = [genero['name'] for genero in filme_info["genres"]]
                 filme = Filme(
                     id=filme_info["id"],
                     titulo=filme_info["title"],
                     descricao=filme_info["overview"],
                     nota_media=filme_info["vote_average"],
-                    poster=filme_info["poster_path"]
+                    poster=filme_info["poster_path"],
+                    generos=generos_filme,  # Usa a lista de nomes dos gêneros
+                    data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
+                    lingua=filme_info["original_language"],
+                    duracao=filme_info["runtime"],
+                    pais=filme_info["origin_country"]
                 )
                 filmes.append(filme)
             return filmes
@@ -34,13 +41,19 @@ class API_TMDb:
 
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
-            filme_detalhes = response.json()  # Retorna diretamente o objeto do filme
+            filme_info = response.json()  # Retorna diretamente o objeto do filme
+            generos_filme = [genero['name'] for genero in filme_info["genres"]]
             filme = Filme(
-                id=filme_detalhes["id"],
-                titulo=filme_detalhes["title"],
-                descricao=filme_detalhes["overview"],
-                nota_media=filme_detalhes["vote_average"],
-                poster=filme_detalhes["poster_path"]
+                id=filme_info["id"],
+                titulo=filme_info["title"],
+                descricao=filme_info["overview"],
+                nota_media=filme_info["vote_average"],
+                poster=filme_info["poster_path"],
+                generos=generos_filme,  # Usa a lista de nomes dos gêneros
+                data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
+                lingua=filme_info["original_language"],
+                duracao=filme_info["runtime"],
+                pais=filme_info["origin_country"]
             )
             return filme
         else:
@@ -55,12 +68,18 @@ class API_TMDb:
             filmes_search = response.json().get('results', [])
             filmes = []
             for filme_info in filmes_search:
+                generos_filme = [genero['name'] for genero in filme_info["genres"]]
                 filme = Filme(
                     id=filme_info["id"],
                     titulo=filme_info["title"],
                     descricao=filme_info["overview"],
                     nota_media=filme_info["vote_average"],
-                    poster=filme_info["poster_path"]
+                    poster=filme_info["poster_path"],
+                    generos=generos_filme,  # Usa a lista de nomes dos gêneros
+                    data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
+                    lingua=filme_info["original_language"],
+                    duracao=filme_info["runtime"],
+                    pais=filme_info["origin_country"]
                 )
                 filmes.append(filme)
             return filmes
@@ -74,13 +93,19 @@ class API_TMDb:
         response = requests.get(url, headers=headers)
         print(response)
         if response.status_code == 200:
-            filme_detalhes = response.json()  # Retorna diretamente o objeto do filme
+            filme_info = response.json()  # Retorna diretamente o objeto do filme
+            generos_filme = [genero['name'] for genero in filme_info["genres"]]
             filme = Filme(
-                id=filme_detalhes["id"],
-                titulo=filme_detalhes["title"],
-                descricao=filme_detalhes["overview"],
-                nota_media=filme_detalhes["vote_average"],
-                poster=filme_detalhes["poster_path"]
+                id=filme_info["id"],
+                titulo=filme_info["title"],
+                descricao=filme_info["overview"],
+                nota_media=filme_info["vote_average"],
+                poster=filme_info["poster_path"],
+                generos=generos_filme,  # Usa a lista de nomes dos gêneros
+                data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
+                lingua=filme_info["original_language"],
+                duracao=filme_info["runtime"],
+                pais=filme_info["origin_country"]
             )
             return filme
         else:
