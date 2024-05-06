@@ -7,6 +7,24 @@ class API_TMDb:
         print(api_key)
         self.base_url = "https://api.themoviedb.org/3"
 
+    def definir_generos(self, generos_ids):
+        url = f"{self.base_url}/genre/movie/list?language=en"
+        headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
+
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            generos_id_lista = response.json().get('genres', [])
+            generos_nomes = []
+            for genero_id in generos_ids:
+                for genero in generos_id_lista:
+                    if genero['id'] == genero_id:
+                        generos_nomes.append(genero['name'])
+                        break
+            return generos_nomes
+        else:
+            return None
+
+
     def buscar_filmes_trending(self):
         url = f"{self.base_url}/trending/movie/day?language=en-US"
         headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
@@ -16,19 +34,12 @@ class API_TMDb:
             filmes_trending = response.json().get('results', [])
             filmes = []
             for filme_info in filmes_trending:
-                # Extrai apenas os nomes dos gêneros
-                generos_filme = [genero['name'] for genero in filme_info["genres"]]
                 filme = Filme(
                     id=filme_info["id"],
                     titulo=filme_info["title"],
                     descricao=filme_info["overview"],
                     nota_media=filme_info["vote_average"],
-                    poster=filme_info["poster_path"],
-                    generos=generos_filme,  # Usa a lista de nomes dos gêneros
-                    data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
-                    lingua=filme_info["original_language"],
-                    duracao=filme_info["runtime"],
-                    pais=filme_info["origin_country"]
+                    poster=filme_info["poster_path"]
                 )
                 filmes.append(filme)
             return filmes

@@ -9,6 +9,12 @@ class Usuario:
         self.senha = senha
         self.watchlist = watchlist
         self.resenhas = resenhas
+        # idade
+        # genero
+        # nacionalidade
+        # favoritos
+        # assistidos
+        # bio
 
     def get_nome(self):
         return self.nome
