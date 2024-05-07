@@ -18,15 +18,19 @@ body {
 }
 
 header {
-    background-color: #333;
+    background-color: #000000;
     color: #fff;
-    padding: 20px 0;
+    padding: 5px 0;
     width: 100%;
+    position: fixed; /* Alterada para fixed */
+    top: 0; /* Para fixar no topo */
+    left: 0; /* Para alinhar à esquerda */
+    z-index: 1000; /* Para garantir que o cabeçalho esteja na frente de outros elementos */
 }
 
 .nav-links {
     display: flex;
-    justify-content: center;
+    align-items: center; /* Centralizar verticalmente */
 }
 
 .nav-links li {
@@ -54,40 +58,34 @@ header {
 form {
     max-width: 400px;
     text-align: left;
+    margin-top: 100px;
 }
 
 label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 5px; /* Reduz a margem inferior entre os labels */
 }
 
+
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Reduz a margem inferior entre os inputs */
 }
+
 
 button {
     padding: 10px 20px;
-    background-color: #333;
+    background-color: #000000;
     color: #fff;
     border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #555;
-}
-
-footer {
-    background-color: #333;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
-    margin-top: 20px;
-    width: 100%;
-    border-radius: 10px;
+    background-color: #000000;
 }
 
 .logo {
@@ -105,6 +103,7 @@ footer {
 
 .title {
     flex-grow: 1; /* Faz o título ocupar todo o espaço disponível */
+    color: #ffffff; /* Define a cor do texto para branco */
 }
 
 .catalog {
@@ -132,5 +131,6 @@ footer {
 
 .section-title {
     margin-bottom: 20px; /* Adiciona espaço abaixo do título */
+    margin-right: 60px;
 }
 
