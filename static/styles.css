@@ -10,22 +10,25 @@ body {
     background-color: #f4f4f4;
 }
 
-.container {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 0 40px;
 
-}
 
 header {
     background-color: #000000;
     color: #fff;
     padding: 5px 0;
     width: 100%;
-    position: fixed; /* Alterada para fixed */
-    top: 0; /* Para fixar no topo */
-    left: 0; /* Para alinhar à esquerda */
+    position: fixed; /* Fixa o cabeçalho na posição */
+    top: 0; /* Posiciona o cabeçalho no topo da página */
+    left: 0;
     z-index: 1000; /* Para garantir que o cabeçalho esteja na frente de outros elementos */
+}
+
+main {
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
 }
 
 .nav-links {
@@ -96,9 +99,37 @@ button:hover {
     width: 50px; /* Diminui o tamanho do logo */
 }
 
+.logo a, h1.title a{
+    text-decoration: none;
+    color: white;
+    &:hover{
+        color: #ffcc00;
+    }
+}
+
+.nav-links{
+    list-style: none;
+
+}
+
+a:-webkit-any-link {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.username{
+    text-decoration: none;
+    color: #ffcc00;
+}
+
 .container {
     display: flex;
     align-items: center; /* Centraliza verticalmente os itens dentro do header */
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px;
 }
 
 .title {
@@ -123,10 +154,16 @@ button:hover {
 }
 
 .item img {
-    max-width: 100%;
-    height: 200px; /* Altura fixa para as imagens */
+    max-width: 100%; /* Define a largura máxima da imagem como 100% do contêiner pai */
+    max-height: 200px; /* Define a altura máxima da imagem para evitar cortes */
     border-radius: 5px;
     margin-bottom: 10px;
+    margin-top: 20px; /* Adiciona margem superior para mover a imagem para baixo */
+}
+
+a.button {
+    color: #5100ff;
+    text-decoration: underline;
 }
 
 .section-title {
