@@ -3,7 +3,7 @@ import json
 
 
 class Usuario:
-    def __init__(self, nome, senha, email, idade, genero, nacionalidade, watchlist=[], resenhas=None, favoritos=[], assistidos=[], bio=None):
+    def __init__(self, nome, senha, email, idade, genero, nacionalidade, watchlist=[], resenhas={}, favoritos=[], assistidos=[], bio=None):
         self.nome = nome
         self.senha = senha
         self.email= email
