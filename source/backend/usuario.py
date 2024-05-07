@@ -3,18 +3,19 @@ import json
 
 
 class Usuario:
-    def __init__(self, nome, senha, watchlist=None, resenhas=None, email=None):
+    def __init__(self, nome, senha, email, idade, genero, nacionalidade, watchlist=[], resenhas=None, favoritos=[], assistidos=[], bio=None):
         self.nome = nome
-        self.email= email
         self.senha = senha
+        self.email= email
+        self.idade = idade
+        self.genero = genero
+        self.nacionalidade = nacionalidade
         self.watchlist = watchlist
         self.resenhas = resenhas
-        # idade
-        # genero
-        # nacionalidade
-        # favoritos
-        # assistidos
-        # bio
+        self.favoritos = favoritos
+        self.assistidos = assistidos
+        self.bio = bio
+
 
     def get_nome(self):
         return self.nome
@@ -22,12 +23,19 @@ class Usuario:
     def get_watchlist(self):
         return self.watchlist
     
+    def get_favoritos(self):
+        return self.favoritos
+    
     def adicionar_resenha(self, db, resenha):
         movie_id = str(resenha.movie_id)
         if movie_id not in self.resenhas:
             self.resenhas[movie_id] = []
         self.resenhas[movie_id] = [resenha.texto, resenha.nota]  
         db.atualizar_resenhas_no_banco_de_dados(self)
+
+    def adicionar_bio(self, db, bio):
+        self.bio = bio  
+        db.atualizar_bio_no_banco_de_dados(self)
 
     def adicionar_filme_watchlist(self, db, filme_id):
         filme_id = str(filme_id)
@@ -37,68 +45,13 @@ class Usuario:
             self.watchlist.append(filme_id)
             db.atualizar_watchlist_no_banco_de_dados(self)
 
-    # def _atualizar_resenhas_no_banco_de_dados(self):
-    #     conn = sqlite3.connect('usuarios.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute('''
-    #         UPDATE usuarios SET resenhas = ? WHERE nome = ?
-    #     ''', (json.dumps(self.resenhas), self.nome))
-    #     conn.commit()
-    #     conn.close()
-
-    # def _atualizar_watchlist_no_banco_de_dados(self):
-    #     conn = sqlite3.connect('usuarios.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute('''
-    #         UPDATE usuarios SET watchlist = ? WHERE nome = ?
-    #     ''', (json.dumps(self.watchlist), self.nome))
-    #     conn.commit()
-    #     conn.close()
-
-
-    # @staticmethod
-    # def adicionar_usuario(nome, senha):
-    #     print(f"Inserindo usuário: {nome}")
-    #     conn = sqlite3.connect('usuarios.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute('''
-    #         INSERT INTO usuarios (nome, senha, watchlist, resenhas)
-    #         VALUES (?, ?, ?, ?)
-    #     ''', (nome, senha, json.dumps([]), json.dumps({})))
-    #     conn.commit()
-    #     conn.close()
-    #     print(f"Usuário {nome} inserido com sucesso.")
-
-    # @staticmethod
-    # def validar_login(nome, senha):
-    #     conn = sqlite3.connect('usuarios.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute('''
-    #         SELECT * FROM usuarios WHERE nome = ? AND senha = ?
-    #     ''', (nome, senha))
-    #     usuario = cursor.fetchone()
-    #     conn.close()
-
-    #     if usuario:
-    #         return True
-    #     else:
-    #         return False
-        
-    # @staticmethod
-    # def obter_usuario_pelo_nome(nome):
-    #     conn = sqlite3.connect('usuarios.db')
-    #     cursor = conn.cursor()
-    #     cursor.execute('SELECT * FROM usuarios WHERE nome = ?', (nome,))
-    #     usuario = cursor.fetchone()
-    #     conn.close()
-    #     if usuario:
-    #         # Se o usuário foi encontrado, retornar um objeto Usuario com os dados recuperados do banco de dados
-    #         id, nome, senha, watchlist_json, resenhas_json = usuario
-    #         watchlist = json.loads(watchlist_json)
-    #         resenhas = json.loads(resenhas_json)
-    #         return Usuario(nome, senha, watchlist, resenhas)
-    #     else:
-    #         return None
+    def adicionar_filme_favoritos(self, db, filme_id):
+        filme_id = str(filme_id)
+        if filme_id in self.favoritos:
+            return
+        else:
+            self.favoritos.append(filme_id)
+            db.atualizar_favoritos_no_banco_de_dados(self)
         
 
     # Método para obter a resenha e a nota do usuário para um filme específico

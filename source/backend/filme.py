@@ -1,5 +1,5 @@
 class Filme:
-    def __init__(self, id, titulo, descricao, nota_media, poster, generos=None, data_lancamento=None, lingua=None, duracao=None, pais=None):
+    def __init__(self, id, titulo, descricao, nota_media, poster, elenco_principal=None, diretor=None, generos=None, data_lancamento=None, lingua=None, duracao=None, pais=None):
         self.id = id
         self.titulo = titulo
         self.descricao = descricao
@@ -11,3 +11,5 @@ class Filme:
         self.lingua = lingua # original_language
         self.duracao = duracao # runtime
         self.pais = pais # origin_country
+        self.diretor = diretor
+        self.elenco_principal = elenco_principal

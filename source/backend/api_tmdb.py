@@ -7,26 +7,41 @@ class API_TMDb:
         print(api_key)
         self.base_url = "https://api.themoviedb.org/3"
 
-    def definir_generos(self, generos_ids):
-        url = f"{self.base_url}/genre/movie/list?language=en"
+    def definir_diretor(self, movie_id):
+        url = f"{self.base_url}/movie/{movie_id}/credits?language=pt"
         headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
 
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
-            generos_id_lista = response.json().get('genres', [])
-            generos_nomes = []
-            for genero_id in generos_ids:
-                for genero in generos_id_lista:
-                    if genero['id'] == genero_id:
-                        generos_nomes.append(genero['name'])
-                        break
-            return generos_nomes
+            crew = response.json().get('crew', [])
+            diretor = None
+            for member in crew:
+                if member['job'] == 'Director':
+                    diretor = member['name']
+                    break
+            return diretor
+        else:
+            return None
+        
+
+    def definir_elenco(self, movie_id):
+        url = f"{self.base_url}/movie/{movie_id}/credits?language=pt"
+        headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
+
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            cast = response.json().get('cast', [])
+            elenco = []
+            for member in cast:
+                if member['order'] <= 3:
+                    elenco.append(member['name'])
+            return elenco
         else:
             return None
 
 
     def buscar_filmes_trending(self):
-        url = f"{self.base_url}/trending/movie/day?language=en-US"
+        url = f"{self.base_url}/trending/movie/day?language=pt"
         headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
 
         response = requests.get(url, headers=headers)
@@ -47,7 +62,7 @@ class API_TMDb:
             return None
         
     def buscar_detalhes_filme(self, movie_id):
-        url = f"{self.base_url}/movie/{movie_id}?language=en-US"
+        url = f"{self.base_url}/movie/{movie_id}?language=pt"
         headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
 
         response = requests.get(url, headers=headers)
@@ -64,14 +79,16 @@ class API_TMDb:
                 data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
                 lingua=filme_info["original_language"],
                 duracao=filme_info["runtime"],
-                pais=filme_info["origin_country"]
+                pais=filme_info["origin_country"],
+                diretor=self.definir_diretor(filme_info["id"]),
+                elenco_principal=self.definir_elenco(filme_info["id"])
             )
             return filme
         else:
             return None
         
     def buscar_filme(self, movie_title):
-        url = f"{self.base_url}/search/movie?query={movie_title}&include_adult=false&language=en-US&page=1"
+        url = f"{self.base_url}/search/movie?query={movie_title}&include_adult=false&language=pt&page=1"
         headers = {"Accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
 
         response = requests.get(url, headers=headers)
@@ -79,18 +96,12 @@ class API_TMDb:
             filmes_search = response.json().get('results', [])
             filmes = []
             for filme_info in filmes_search:
-                generos_filme = [genero['name'] for genero in filme_info["genres"]]
                 filme = Filme(
                     id=filme_info["id"],
                     titulo=filme_info["title"],
                     descricao=filme_info["overview"],
                     nota_media=filme_info["vote_average"],
-                    poster=filme_info["poster_path"],
-                    generos=generos_filme,  # Usa a lista de nomes dos gêneros
-                    data_lancamento=filme_info["release_date"],  # Corrigido: data_lancamento
-                    lingua=filme_info["original_language"],
-                    duracao=filme_info["runtime"],
-                    pais=filme_info["origin_country"]
+                    poster=filme_info["poster_path"]
                 )
                 filmes.append(filme)
             return filmes
@@ -98,7 +109,7 @@ class API_TMDb:
             return None
         
     def buscar_filme_por_id(self, movie_id):
-        url = f"{self.base_url}/movie/{movie_id}?language=en-US"
+        url = f"{self.base_url}/movie/{movie_id}?language=pt"
         print(url)
         headers = {"accept": "application/json", "Authorization": f"Bearer {self.api_key}"}
         response = requests.get(url, headers=headers)

@@ -10,15 +10,19 @@
     <header>
         <div class="container">
             <div class="logo">
-                <img src="logo.jpg" alt="Logo UTFilmes">
+                <a href="/">
+                    <img src="logo.jpg" alt="Logo UTFilmes">
+                </a>
             </div>
-            <h1 class="title">UTFilmes</h1>
+            <h1 class="title">
+                <a href="/">UTFilmes</a>
+            </h1>
             <nav>
                 <ul class="nav-links">
-                    {% if 'usuario_id' in session %}
-                        <li>Usuário: {{ session['usuario_id'] }}</li>
-                        <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
-                    {% endif %}
+                    <a href="/usuario">Usuario: {{ session['usuario_id'] }}</a>
+                    <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
+                    <!-- Adicionando o link para a watchlist -->
+                    <li><a href="{{ url_for('watchlist') }}">Watchlist</a></li>
                 </ul>
             </nav>
         </div>

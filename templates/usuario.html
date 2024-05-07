@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil do Usuário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="/">
+                    <img src="logo.jpg" alt="Logo UTFilmes">
+                </a>
+            </div>
+            <h1 class="title">
+                <a href="/">UTFilmes</a>
+            </h1>
+            <nav>
+                <ul class="nav-links">
+                    <a href="/usuario">Usuario: {{ session['usuario_id'] }}</a>
+                    <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
+                    <!-- Adicionando o link para a watchlist -->
+                    <li><a href="{{ url_for('watchlist') }}">Watchlist</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="perfil-usuario" class="section">
+        <div class="container">
+            <h2 class="section-title">Informações do Usuário</h2>
+            <div class="user-info">
+                <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+                {% if usuario.bio %}
+                <p><strong>Biografia:</strong> {{ usuario.bio }}</p>
+                {% else %}
+                <form action="/adicionar_biografia" method="POST">
+                    <label for="biografia">Biografia:</label>
+                    <input type="text" id="biografia" name="biografia" required>
+                    <button type="submit">Adicionar Biografia</button>
+                </form>
+                {% endif %}
+                <p><strong>Idade:</strong> {{ usuario.idade }}</p>
+                <p><strong>Nacionalidade:</strong> {{ usuario.nacionalidade }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="catalog">
+            <h2 class="section-title">Filmes Favoritos</h2>
+            <!-- Itera sobre os filmes e exibe-os -->
+            <div class="favorite-items">
+                {% for filme in filmes %}
+                <div class="item">
+                    <a href="{{ url_for('filme', id=filme.id) }}">
+                        <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
+                    </a>
+                    <h2>{{ filme.titulo }}</h2>
+                    <p>{{ filme.descricao }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 UTFilmes. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

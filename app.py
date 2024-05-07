@@ -19,17 +19,24 @@ app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = 'teste123'
 
 @app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/trending')
 def catalogo():
     tmdb_api = API_TMDb(api_key=tmdb_token)
     filmes = tmdb_api.buscar_filmes_trending()
     if filmes:
-        return render_template('trending.html', filmes=filmes)
+        return render_template('index.html', filmes=filmes)
     else:
         return "Erro ao obter filmes do TMDB"
+
+@app.route('/cadastro')
+def cadastro():
+    # Verifica se há uma sessão ativa de usuário
+    if 'usuario_id' in session:
+        # Se houver uma sessão ativa, redireciona o usuário para outra rota
+        return redirect(url_for('usuario'))
+    else:
+        # Se não houver uma sessão ativa, renderiza a página de cadastro
+        return render_template('cadastro.html')
+
     
 @app.route('/search')
 def busca():
@@ -48,14 +55,15 @@ def filme(id):
     filme = tmdb_api.buscar_detalhes_filme(id)
     if filme:
         # Verifica se há um usuário na sessão
-        resenha = None
         if 'usuario_id' in session:
             # Obtém o usuário da sessão
             usuario = db.obter_usuario_pelo_nome(nome=session['usuario_id'])
             if usuario:
                 # Obtém a resenha e a nota do usuário para o filme atual
                 resenha, nota = usuario.obter_resenha_e_nota(id)
-        return render_template('filme.html', filme=filme, resenha=resenha, nota=nota)
+                return render_template('filme.html', filme=filme, resenha=resenha, nota=nota)
+        # Se não houver usuário na sessão, renderize a página sem resenha e nota
+        return render_template('filme.html', filme=filme)
     else:
         return "Filme não encontrado"
     
@@ -64,15 +72,22 @@ def cadastrar():
     if request.method == 'POST':
         nome = request.form['username']
         senha = request.form['password']
+        idade = request.form['idade']
+        nacionalidade = request.form['nacionalidade']
+        genero = request.form['genero']
+        email = request.form['email']
+        usuario = Usuario(nome, senha, email, idade, genero, nacionalidade)
         # Adiciona o usuário ao banco de dados
-        print("Ok")
-        db.adicionar_usuario(nome, senha)
+        db.adicionar_usuario(usuario)
         # Redireciona para a página de login
         return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'usuario_id' in session:
+        # Se houver uma sessão ativa, redireciona o usuário para outra rota
+        return redirect(url_for('usuario'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -131,10 +146,8 @@ def salvar_resenha():
 @app.route('/watchlist', methods=['GET'])
 def watchlist():
     if request.method == 'GET':
-        print("retornou")
         usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
         filmes_ids = usuario_atual.get_watchlist()
-        print(filmes_ids)
         tmdb_api = API_TMDb(api_key=tmdb_token)
         filmes_obj = []
         for filme_id in filmes_ids:
@@ -153,6 +166,43 @@ def adicionar_watchlist():
             return redirect(url_for('watchlist'))
         else:
             return "Erro ao adicionar à watchlist"
+        
+@app.route('/adicionar_favoritos', methods=['POST'])
+def adicionar_favoritos():
+    if request.method == 'POST':
+        movie_id = request.form['movie_id']
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
+        if usuario_atual:
+            usuario_atual.adicionar_filme_favoritos(db, movie_id)
+            # Redirecionar para a página de watchlist
+            return redirect(url_for('usuario'))
+        else:
+            return "Erro ao adicionar aos favoritos"
+        
+@app.route('/adicionar_biografia', methods=['POST'])
+def adicionar_biografia():
+    if request.method == 'POST':
+        bio = request.form['biografia']
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
+        if usuario_atual:
+            usuario_atual.adicionar_bio(db, bio)
+            # Redirecionar para a página de watchlist
+            return redirect(url_for('usuario'))
+        else:
+            return "Erro ao adicionar biografia"
+        
+@app.route('/usuario', methods=['GET'])
+def usuario():
+    if request.method == 'GET':
+        # Obtém o usuário da sessão
+        usuario = db.obter_usuario_pelo_nome(nome=session['usuario_id'])
+        filmes_ids = usuario.get_favoritos()
+        tmdb_api = API_TMDb(api_key=tmdb_token)
+        filmes_obj = []
+        for filme_id in filmes_ids:
+            filme = tmdb_api.buscar_filme_por_id(filme_id)
+            filmes_obj.append(filme)
+        return render_template('usuario.html', usuario=usuario, filmes=filmes_obj)
 
 if __name__ == '__main__':
     app.run(debug=True)

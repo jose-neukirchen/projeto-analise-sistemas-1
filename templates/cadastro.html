@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTFilmes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="/">
+                    <img src="logo.jpg" alt="Logo UTFilmes">
+                </a>
+            </div>
+            <h1 class="title">
+                <a href="/">UTFilmes</a>
+            </h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="/cadastro">Cadastro</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div id="cadastro" class="section">
+        <div class="container">
+            <h2 class="section-title">Cadastro de Usuário</h2>
+            <form action="/cadastrar" method="post" id="cadastro-form">
+                <label for="username">Usuário:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Senha:</label>
+                <input type="password" id="password" name="password" required>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+                <label for="idade">Idade:</label>
+                <input type="number" id="idade" name="idade" min="1" max="99" required>
+                <label for="nacionalidade">Nacionalidade:</label>
+                <select id="nacionalidade" name="nacionalidade" required>
+                </select>
+                <label for="genero">Gênero:</label>
+                <select id="genero" name="genero" required>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Feminino">Feminino</option>
+                    <option value="Prefiro não informar">Prefiro não informar</option>
+                </select>
+                <button type="submit">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 UTFilmes. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Consulta dinâmica para preencher a lista suspensa de nacionalidades
+        fetch('https://restcountries.com/v3.1/all')
+            .then(response => response.json())
+            .then(data => {
+                const selectNacionalidade = document.getElementById('nacionalidade');
+                data.forEach(country => {
+                    const option = document.createElement('option');
+                    option.value = country.name.common;
+                    option.textContent = country.name.common;
+                    selectNacionalidade.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erro ao buscar países:', error));
+    </script>
+</body>
+</html>
