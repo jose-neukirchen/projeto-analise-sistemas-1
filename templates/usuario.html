@@ -8,12 +8,8 @@
 </head>
 <body>
     <header>
-        <div class="container">
-            <div class="logo">
-                <a href="/">
-                    <img src="logo.jpg" alt="Logo UTFilmes">
-                </a>
-            </div>
+        <div class="header__container">
+        
             <h1 class="title">
                 <a href="/">UTFilmes</a>
             </h1>
@@ -27,44 +23,46 @@
             </nav>
         </div>
     </header>
-
-    <div id="perfil-usuario" class="section">
-        <div class="container">
-            <h2 class="section-title">Informações do Usuário</h2>
-            <div class="user-info">
-                <p><strong>Nome:</strong> {{ usuario.nome }}</p>
-                {% if usuario.bio %}
-                <p><strong>Biografia:</strong> {{ usuario.bio }}</p>
-                {% else %}
-                <form action="/adicionar_biografia" method="POST">
-                    <label for="biografia">Biografia:</label>
-                    <input type="text" id="biografia" name="biografia" required>
-                    <button type="submit">Adicionar Biografia</button>
-                </form>
-                {% endif %}
-                <p><strong>Idade:</strong> {{ usuario.idade }}</p>
-                <p><strong>Nacionalidade:</strong> {{ usuario.nacionalidade }}</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="catalog">
-            <h2 class="section-title">Filmes Favoritos</h2>
-            <!-- Itera sobre os filmes e exibe-os -->
-            <div class="favorite-items">
-                {% for filme in filmes %}
-                <div class="item">
-                    <a href="{{ url_for('filme', id=filme.id) }}">
-                        <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
-                    </a>
-                    <h2>{{ filme.titulo }}</h2>
-                    <p>{{ filme.descricao }}</p>
+    <main> 
+        <div id="perfil-usuario" class="section">
+            <div class="main__container">
+                <h2 class="section-title">Informações do Usuário</h2>
+                <div class="user-info">
+                    <p><strong>Nome:</strong> {{ usuario.nome }}</p>
+                    {% if usuario.bio %}
+                    <p><strong>Biografia:</strong> {{ usuario.bio }}</p>
+                    {% else %}
+                    <form action="/adicionar_biografia" method="POST">
+                        <label for="biografia">Biografia:</label>
+                        <input type="text" id="biografia" name="biografia" required>
+                        <button type="submit">Adicionar Biografia</button>
+                    </form>
+                    {% endif %}
+                    <p><strong>Idade:</strong> {{ usuario.idade }}</p>
+                    <p><strong>Nacionalidade:</strong> {{ usuario.nacionalidade }}</p>
                 </div>
-                {% endfor %}
             </div>
         </div>
-    </div>
+
+
+        <div class="second__main--container">
+            <div class="catalog">
+                <h2 class="section-title">Filmes Favoritos</h2>
+                <!-- Itera sobre os filmes e exibe-os -->
+                <div class="favorite-items">
+                    {% for filme in filmes %}
+                    <div class="item">
+                        <a href="{{ url_for('filme', id=filme.id) }}">
+                            <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
+                        </a>
+                        <h2>{{ filme.titulo }}</h2>
+                        <p>{{ filme.descricao }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
 
     <footer>
         <div class="container">

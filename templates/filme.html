@@ -9,11 +9,7 @@
 <body>
     <header>
         <div class="container">
-            <div class="logo">
-                <a href="/">
-                    <img src="logo.jpg" alt="Logo UTFilmes">
-                </a>
-            </div>
+            
             <h1 class="title">
                 <a href="/">UTFilmes</a>
             </h1>
@@ -23,7 +19,7 @@
                         <li><a href="{{ url_for('login') }}">Login</a></li>
                         <li><a href="/cadastro">Cadastro</a></li>
                     {% else %}
-                        <a href="/usuario">Usuario: {{ session['usuario_id'] }}</a>
+                        <a class="username" href="/usuario">Usuario: {{ session['usuario_id'] }}</a>
                         <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
                         <!-- Adicionando o link para a watchlist -->
                         <li><a href="{{ url_for('watchlist') }}">Watchlist</a></li>
@@ -31,39 +27,42 @@
                 </ul>
             </nav>
         </div>
-    </header>
 
-    <div class="container">
-        <div class="filme-details">
-            <img src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
-            <h2>{{ filme.titulo }}</h2>
-            <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
-            <p><strong>Elenco:</strong> {{ filme.elenco_principal | join(', ') }}</p>
-            <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
-            <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p>
-            <p><strong>Duração:</strong> {{ filme.duracao }} minutos</p>
-            <p><strong>Gênero:</strong> {{ filme.generos | join(', ') }}</p>
-            <p><strong>Lançamento:</strong> {{ filme.data_lancamento }}</p>
-            <p><strong>Língua Original:</strong> {{ filme.lingua }}</p>
-            <p><strong>País de Origem:</strong> {{ filme.pais | join(', ') }}</p>
-            {% if resenha %}
-                <p><strong>Sua Resenha:</strong></p>
-                <p><strong>Nota:</strong> {{ nota }}</p>
-                <p><strong>Resenha:</strong> {{ resenha }}</p>
-            {% endif %}
-            <!-- Botão de Review -->
-            <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Review</a>
-            <!-- Botão de Watchlist -->
-            <form action="{{ url_for('adicionar_watchlist') }}" method="POST">
-                <input type="hidden" name="movie_id" value="{{ filme.id }}">
-                <button type="submit">Adicionar à Watchlist</button>
-            </form>
-            <form action="{{ url_for('adicionar_favoritos') }}" method="POST">
-                <input type="hidden" name="movie_id" value="{{ filme.id }}">
-                <button type="submit">Adicionar aos Favoritos</button>
-            </form>
+    </header>
+    <main>
+
+        <div class="container">
+            <div class="filme-details"> 
+                <img class = "poster" src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
+                <h2>{{ filme.titulo }}</h2>
+                <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
+                <p><strong>Elenco:</strong> {{ filme.elenco_principal | join(', ') }}</p>
+                <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
+                <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p>
+                <p><strong>Duração:</strong> {{ filme.duracao }} minutos</p>
+                <p><strong>Gênero:</strong> {{ filme.generos | join(', ') }}</p>
+                <p><strong>Lançamento:</strong> {{ filme.data_lancamento }}</p>
+                <p><strong>Língua Original:</strong> {{ filme.lingua }}</p>
+                <p><strong>País de Origem:</strong> {{ filme.pais | join(', ') }}</p>
+                {% if resenha %}
+                    <p><strong>Sua Resenha:</strong></p>
+                    <p><strong>Nota:</strong> {{ nota }}</p>
+                    <p><strong>Resenha:</strong> {{ resenha }}</p>
+                {% endif %}
+                <!-- Botão de Review -->
+                <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Review</a>
+                <!-- Botão de Watchlist -->
+                <form action="{{ url_for('adicionar_watchlist') }}" method="POST">
+                    <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                    <button type="submit">Adicionar à Watchlist</button>
+                </form>
+                <form action="{{ url_for('adicionar_favoritos') }}" method="POST">
+                    <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                    <button type="submit">Adicionar aos Favoritos</button>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 
     <footer>
         <div class="container">
@@ -71,4 +70,8 @@
         </div>
     </footer>
 </body>
+<script>
+    import logo from "../assets/logo.png";
+    const imagemLogo = document.getElementById("logo-UTFilme")
+</script>
 </html>
