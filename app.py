@@ -203,6 +203,15 @@ def usuario():
             filme = tmdb_api.buscar_filme_por_id(filme_id)
             filmes_obj.append(filme)
         return render_template('usuario.html', usuario=usuario, filmes=filmes_obj)
+    
+@app.route('/resenhas/<int:id>')
+def ver_resenhas(id):
+    tmdb_api = API_TMDb(api_key=tmdb_token)
+    filme = tmdb_api.buscar_detalhes_filme(id)
+    
+    resenhas = db.obter_resenhas_por_id_do_filme(id)
+    
+    return render_template('resenhas.html', filme=filme, resenhas=resenhas)
 
 if __name__ == '__main__':
     app.run(debug=True)

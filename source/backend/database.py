@@ -31,6 +31,34 @@ class Database:
             )
         ''')
 
+        cursor.execute('''
+            CREATE TABLE IF NOT EXISTS resenhas (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                movie_id TEXT NOT NULL,
+                lista_resenhas TEXT NOT NULL
+            )
+        ''')
+
+        # cursor.execute('''
+        #     CREATE TABLE IF NOT EXISTS filmes (
+        #         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        #         movie_id TEXT NOT NULL,
+        #         titulo TEXT NOT NULL,
+        #         descricao TEXT NOT NULL,
+        #         nota_media TEXT NOT NULL,
+        #         poster TEXT NOT NULL,
+        #         generos TEXT NOT NULL,
+        #         resenhas TEXT NOT NULL,
+        #         data_lancamento TEXT NOT NULL,
+        #         lingua TEXT NOT NULL,
+        #         duracao TEXT NOT NULL,
+        #         pais TEXT NOT NULL,
+        #         diretor TEXT NOT NULL,
+        #         elenco_principal TEXT NOT NULL
+        #     )
+        # ''')
+
+
         # Salva as alterações
         conn.commit()
 
@@ -87,14 +115,57 @@ class Database:
         else:
             return None
 
-    def atualizar_resenhas_no_banco_de_dados(self, usuario):
+    # def atualizar_resenhas_no_banco_de_dados(self, usuario, resenha):
+    #     conn = sqlite3.connect(self.db_name)
+    #     cursor = conn.cursor()
+    #     cursor.execute('''
+    #         UPDATE usuarios SET resenhas = ? WHERE nome = ?
+    #     ''', (json.dumps(usuario.resenhas), usuario.nome))
+    #     conn.commit()
+    #     conn.close()
+
+    def atualizar_resenhas_no_banco_de_dados(self, usuario, resenha):
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
+
+        # Atualizar a tabela 'usuarios'
         cursor.execute('''
             UPDATE usuarios SET resenhas = ? WHERE nome = ?
         ''', (json.dumps(usuario.resenhas), usuario.nome))
+
+        # Verificar se já existe uma entrada para este filme na tabela 'resenhas' para este usuário
+        cursor.execute('''
+            SELECT * FROM resenhas WHERE movie_id = ?
+        ''', (resenha.movie_id,))
+
+        existing_entry = cursor.fetchone()
+
+        if existing_entry:
+            # Se já existe uma entrada, atualizar a lista de resenhas
+            existing_resenhas = json.loads(existing_entry[2])
+            existing_resenhas[usuario.nome] = [resenha.texto, resenha.nota]
+
+            cursor.execute('''
+                UPDATE resenhas SET lista_resenhas = ? WHERE id = ?
+            ''', (json.dumps(existing_resenhas), existing_entry[0]))
+        else:
+            # Se não existe uma entrada, inserir uma nova linha na tabela 'resenhas'
+            cursor.execute('''
+                INSERT INTO resenhas (movie_id, lista_resenhas) VALUES (?, ?)
+            ''', (resenha.movie_id, json.dumps({usuario.nome: [resenha.texto, resenha.nota]})))
+
         conn.commit()
         conn.close()
+
+    def obter_resenhas_por_id_do_filme(self, movie_id):
+        conn = sqlite3.connect(Database.db_name)
+        cursor = conn.cursor()
+        cursor.execute('SELECT lista_resenhas FROM resenhas WHERE movie_id = ?', (movie_id,))
+        resenha = cursor.fetchone()
+        resenhas = resenha[0] if resenha is not None else None
+        conn.close()
+        return json.loads(resenhas)
+
 
     def atualizar_watchlist_no_banco_de_dados(self, usuario):
         conn = sqlite3.connect(self.db_name)

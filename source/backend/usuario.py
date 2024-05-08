@@ -31,7 +31,7 @@ class Usuario:
         if movie_id not in self.resenhas:
             self.resenhas[movie_id] = []
         self.resenhas[movie_id] = [resenha.texto, resenha.nota]  
-        db.atualizar_resenhas_no_banco_de_dados(self)
+        db.atualizar_resenhas_no_banco_de_dados(self, resenha)
 
     def adicionar_bio(self, db, bio):
         self.bio = bio  
