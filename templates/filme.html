@@ -46,34 +46,35 @@
                     <p><strong>Nota:</strong> {{ nota }}</p>
                     <p><strong>Resenha:</strong> {{ resenha }}</p>
                 {% endif %}
-                {% if 'usuario_id' in session %}
-                    <!-- Botão de Review -->
-                    <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Fazer Review</a><br><br>
-                    <a href="{{ url_for('ver_resenhas', id=filme.id) }}" class="button">Ver Reviews</a>
-                    <!-- Botão de Watchlist ou Remover da Watchlist -->
-                    {% if na_watchlist %}
-                        <form action="{{ url_for('remover_watchlist') }}" method="POST">
-                            <input type="hidden" name="movie_id" value="{{ filme.id }}">
-                            <button type="submit">Remover da Watchlist</button>
-                        </form>
-                    {% else %}
-                        <form action="{{ url_for('adicionar_watchlist') }}" method="POST">
-                            <input type="hidden" name="movie_id" value="{{ filme.id     }}">
-                            <button type="submit">Adicionar à Watchlist</button>
-                        </form>
-                    {% endif %}
-                    <!-- Botão de Favoritos ou Remover dos Favoritos -->
-                    {% if nos_favoritos %}
-                        <form action="{{ url_for('remover_favoritos') }}" method="POST">
-                            <input type="hidden" name="movie_id" value="{{ filme.id }}">
-                            <button type="submit">Remover dos Favoritos</button>
-                        </form>
-                    {% else %}
-                        <form action="{{ url_for('adicionar_favoritos') }}" method="POST">
-                            <input type="hidden" name="movie_id" value="{{ filme.id }}">
-                            <button type="submit">Adicionar aos Favoritos</button>
-                        </form>
-                    {% endif %}
+                <!-- Botão de Review -->
+                <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Fazer Review</a><br><br>
+                <a href="{{ url_for('ver_resenhas', id=filme.id) }}" class="button">Ver Reviews</a>
+
+                <!-- Botão de Watchlist ou Remover da Watchlist -->
+                {% if na_watchlist %}
+                    <form action="{{ url_for('remover_watchlist') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                        <button type="submit">Remover da Watchlist</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('adicionar_watchlist') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id     }}">
+                        <button type="submit">Adicionar à Watchlist</button>
+                    </form>
+                {% endif %}
+                <!-- Botão de Favoritos ou Remover dos Favoritos -->
+
+                    
+                {% if nos_favoritos %}
+                    <form action="{{ url_for('remover_favoritos') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                        <button type="submit">Remover dos Favoritos</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('adicionar_favoritos') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                        <button type="submit">Adicionar aos Favoritos</button>
+                    </form>
                 {% endif %}
                 <!-- Botão para ver resenhas -->
             </div>
@@ -81,7 +82,7 @@
     </main>
     <footer>
         <div class="container">
-            <p>&copy; 2024 Catálogo de Filmes e Séries. Todos os direitos reservados.</p>
+            <p>&copy; 2024 UTFilmes. Todos os direitos reservados.</p>
         </div>
     </footer>
 </body>
