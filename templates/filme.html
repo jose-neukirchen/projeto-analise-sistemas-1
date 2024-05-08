@@ -63,6 +63,8 @@
                     </form>
                 {% endif %}
                 <!-- Botão de Favoritos ou Remover dos Favoritos -->
+
+                    
                 {% if nos_favoritos %}
                     <form action="{{ url_for('remover_favoritos') }}" method="POST">
                         <input type="hidden" name="movie_id" value="{{ filme.id }}">

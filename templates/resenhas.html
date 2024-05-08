@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resenhas do Filme</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .resenha-info {
+            margin-bottom: 10px;
+        }
+        /* Adicionando estilo para exibir as resenhas em colunas */
+        .resenhas-list {
+            display: flex;
+            flex-direction: column; /* Exibir as resenhas em colunas */
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -38,16 +48,15 @@
         <div class="container">
             <h3>Resenhas:</h3>
         </div>
-        <div class="container">
-            <div class="resenhas-list">
-                {% for nome, resenha in resenhas.items() %}
-                    <div class="container">
-                        <p><strong>Usuário:</strong> {{ nome }}</p>
-                        <p><strong>Resenha:</strong> {{ resenha[0] }}</p>
-                        <p><strong>Nota:</strong> {{ resenha[1] }}</p>
-                    </div>
-                {% endfor %}
-            </div>
+        <div class="container resenhas-list">
+            <!-- Adicionei a classe resenhas-list para aplicar o estilo flex-direction: column -->
+            {% for nome, resenha in resenhas.items() %}
+                <div class="resenha-info">
+                    <div><strong>Usuário: </strong>{{ nome }}</div>
+                    <div><strong>Resenha: </strong>{{ resenha[0] }}</div>
+                    <div><strong>Nota: </strong>{{ resenha[1] }}</div>
+                </div>
+            {% endfor %}
         </div>
     </main>
     <footer>
