@@ -124,6 +124,10 @@ class Database:
             UPDATE usuarios SET resenhas = ? WHERE nome = ?
         ''', (json.dumps(usuario.resenhas), usuario.nome))
 
+        cursor.execute('''
+            UPDATE usuarios SET assistidos = ? WHERE nome = ?
+        ''', (json.dumps(usuario.assistidos), usuario.nome))
+
         # Verificar se já existe uma entrada para este filme na tabela 'resenhas' para este usuário
         cursor.execute('''
             SELECT * FROM resenhas WHERE movie_id = ?
