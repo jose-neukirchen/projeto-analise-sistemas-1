@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Filme</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="title">
+                <a href="/">UTFilmes</a>
+            </h1>
+            <nav>
+                <ul class="nav-links">
+                    {% if 'usuario_id' not in session %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                        <li><a href="/cadastro">Cadastro</a></li>
+                    {% else %}
+                        <a class="username" href="/usuario">Usuario: {{ session['usuario_id'] }}</a>
+                        <li><a href="{{ url_for('logout') }}">Encerrar Sessão</a></li>
+                        <!-- Adicionando o link para a watchlist -->
+                        <li><a href="{{ url_for('watchlist') }}">Watchlist</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="filme-details"> 
+                <img class="poster" src="https://image.tmdb.org/t/p/w185{{ filme.poster }}" alt="Poster de {{ filme.titulo }}">
+                <h2>{{ filme.titulo }}</h2>
+                <p><strong>Diretor:</strong> {{ filme.diretor }}</p>
+                <p><strong>Elenco:</strong> {{ filme.elenco_principal | join(', ') }}</p>
+                <p><strong>Descrição:</strong> {{ filme.descricao }}</p>
+                <p><strong>Nota Média:</strong> {{ filme.nota_media }}</p>
+                <p><strong>Duração:</strong> {{ filme.duracao }} minutos</p>
+                <p><strong>Gênero:</strong> {{ filme.generos | join(', ') }}</p>
+                <p><strong>Lançamento:</strong> {{ filme.data_lancamento }}</p>
+                <p><strong>Língua Original:</strong> {{ filme.lingua }}</p>
+                <p><strong>País de Origem:</strong> {{ filme.pais | join(', ') }}</p>
+                {% if resenha %}
+                    <p><strong>Sua Resenha:</strong></p>
+                    <p><strong>Nota:</strong> {{ nota }}</p>
+                    <p><strong>Resenha:</strong> {{ resenha }}</p>
+                {% endif %}
+                <!-- Botão de Review -->
+                <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Fazer Review</a><br><br>
+                <a href="{{ url_for('ver_resenhas', id=filme.id) }}" class="button">Ver Reviews</a>
+
+                <!-- Botão de Watchlist ou Remover da Watchlist -->
+                {% if na_watchlist %}
+                    <form action="{{ url_for('remover_watchlist') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                        <button type="submit">Remover da Watchlist</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('adicionar_watchlist') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id     }}">
+                        <button type="submit">Adicionar à Watchlist</button>
+                    </form>
+                {% endif %}
+                <!-- Botão de Favoritos ou Remover dos Favoritos -->
+
+                    
+                {% if nos_favoritos %}
+                    <form action="{{ url_for('remover_favoritos') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                        <button type="submit">Remover dos Favoritos</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('adicionar_favoritos') }}" method="POST">
+                        <input type="hidden" name="movie_id" value="{{ filme.id }}">
+                        <button type="submit">Adicionar aos Favoritos</button>
+                    </form>
+                {% endif %}
+                <!-- Botão para ver resenhas -->
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Catálogo de Filmes e Séries. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
