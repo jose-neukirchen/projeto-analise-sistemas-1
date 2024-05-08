@@ -52,6 +52,18 @@ class Usuario:
         else:
             self.favoritos.append(filme_id)
             db.atualizar_favoritos_no_banco_de_dados(self)
+
+    def remover_filme_watchlist(self, db, filme_id):
+        filme_id = str(filme_id)
+        if filme_id in self.watchlist:
+            self.watchlist.remove(filme_id)
+            db.atualizar_watchlist_no_banco_de_dados(self)
+
+    def remover_filme_favoritos(self, db, filme_id):
+        filme_id = str(filme_id)
+        if filme_id in self.favoritos:
+            self.favoritos.remove(filme_id)
+            db.atualizar_favoritos_no_banco_de_dados(self)
         
 
     # Método para obter a resenha e a nota do usuário para um filme específico

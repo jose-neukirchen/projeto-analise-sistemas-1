@@ -49,24 +49,53 @@ def busca():
     return "Erro ao obter filmes do TMDB"
     
     
+# @app.route('/filme/<int:id>', methods=['GET'])  # Define a rota para o filme com base no ID
+# def filme(id):
+#     tmdb_api = API_TMDb(api_key=tmdb_token)
+#     filme = tmdb_api.buscar_detalhes_filme(id)
+#     if filme:
+#         # Verifica se há um usuário na sessão
+#         if 'usuario_id' in session:
+#             # Obtém o usuário da sessão
+#             usuario = db.obter_usuario_pelo_nome(nome=session['usuario_id'])
+#             if usuario:
+#                 # Obtém a resenha e a nota do usuário para o filme atual
+#                 resenha, nota = usuario.obter_resenha_e_nota(id)
+#                 return render_template('filme.html', filme=filme, resenha=resenha, nota=nota)
+#         # Se não houver usuário na sessão, renderize a página sem resenha e nota
+#         return render_template('filme.html', filme=filme)
+#     else:
+#         return "Filme não encontrado"
+
 @app.route('/filme/<int:id>', methods=['GET'])  # Define a rota para o filme com base no ID
 def filme(id):
     tmdb_api = API_TMDb(api_key=tmdb_token)
     filme = tmdb_api.buscar_detalhes_filme(id)
     if filme:
+        # Inicializa as variáveis de verificação
+        na_watchlist = False
+        nos_favoritos = False
+
         # Verifica se há um usuário na sessão
         if 'usuario_id' in session:
             # Obtém o usuário da sessão
             usuario = db.obter_usuario_pelo_nome(nome=session['usuario_id'])
             if usuario:
+                # Verifica se o filme está na watchlist do usuário
+                if str(filme.id) in usuario.watchlist:
+                    na_watchlist = True
+                # Verifica se o filme está nos favoritos do usuário
+                if str(filme.id) in usuario.favoritos:
+                    nos_favoritos = True
+
                 # Obtém a resenha e a nota do usuário para o filme atual
                 resenha, nota = usuario.obter_resenha_e_nota(id)
-                return render_template('filme.html', filme=filme, resenha=resenha, nota=nota)
+                return render_template('filme.html', filme=filme, resenha=resenha, nota=nota, na_watchlist=na_watchlist, nos_favoritos=nos_favoritos)
         # Se não houver usuário na sessão, renderize a página sem resenha e nota
         return render_template('filme.html', filme=filme)
     else:
         return "Filme não encontrado"
-    
+
 @app.route('/cadastrar', methods=['POST'])
 def cadastrar():
     if request.method == 'POST':
@@ -178,6 +207,30 @@ def adicionar_favoritos():
             return redirect(url_for('usuario'))
         else:
             return "Erro ao adicionar aos favoritos"
+        
+@app.route('/remover_watchlist', methods=['POST'])
+def remover_watchlist():
+    if request.method == 'POST':
+        movie_id = request.form['movie_id']
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
+        if usuario_atual:
+            usuario_atual.remover_filme_watchlist(db, movie_id)
+            # Redirecionar para a página de watchlist
+            return redirect(url_for('watchlist'))
+        else:
+            return "Erro ao remover da watchlist"
+        
+@app.route('/remover_favoritos', methods=['POST'])
+def remover_favoritos():
+    if request.method == 'POST':
+        movie_id = request.form['movie_id']
+        usuario_atual = db.obter_usuario_pelo_nome(nome=session.get('usuario_id'))
+        if usuario_atual:
+            usuario_atual.remover_filme_favoritos(db, movie_id)
+            # Redirecionar para a página de watchlist
+            return redirect(url_for('usuario'))
+        else:
+            return "Erro ao remover dos favoritos"
         
 @app.route('/adicionar_biografia', methods=['POST'])
 def adicionar_biografia():
