@@ -47,7 +47,9 @@
                     <p><strong>Resenha:</strong> {{ resenha }}</p>
                 {% endif %}
                 <!-- Botão de Review -->
-                <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Fazer Review</a><br><br>
+                {% if session['usuario_id'] %}
+                    <a href="{{ url_for('resenha', id=filme.id) }}" class="button">Fazer Review</a><br><br>
+                {% endif %}
                 <a href="{{ url_for('ver_resenhas', id=filme.id) }}" class="button">Ver Reviews</a>
 
                 <!-- Botão de Watchlist ou Remover da Watchlist -->
