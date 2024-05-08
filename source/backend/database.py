@@ -115,15 +115,6 @@ class Database:
         else:
             return None
 
-    # def atualizar_resenhas_no_banco_de_dados(self, usuario, resenha):
-    #     conn = sqlite3.connect(self.db_name)
-    #     cursor = conn.cursor()
-    #     cursor.execute('''
-    #         UPDATE usuarios SET resenhas = ? WHERE nome = ?
-    #     ''', (json.dumps(usuario.resenhas), usuario.nome))
-    #     conn.commit()
-    #     conn.close()
-
     def atualizar_resenhas_no_banco_de_dados(self, usuario, resenha):
         conn = sqlite3.connect(self.db_name)
         cursor = conn.cursor()
@@ -162,9 +153,9 @@ class Database:
         cursor = conn.cursor()
         cursor.execute('SELECT lista_resenhas FROM resenhas WHERE movie_id = ?', (movie_id,))
         resenha = cursor.fetchone()
-        resenhas = resenha[0] if resenha is not None else None
+        resenhas = json.loads(resenha[0]) if resenha is not None else {}
         conn.close()
-        return json.loads(resenhas)
+        return resenhas
 
 
     def atualizar_watchlist_no_banco_de_dados(self, usuario):
